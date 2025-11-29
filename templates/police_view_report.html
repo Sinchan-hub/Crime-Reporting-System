@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>View Report — {{ report.get('title') }}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  :root{
+    --blue-900:#0b4da0; --bg:#eaf2fb; --panel:#fff; --muted:#6b7280; --radius:12px; --card-shadow:0 8px 28px rgba(16,24,40,0.06);
+  }
+  body{margin:0; font-family:Inter, system-ui; background:var(--bg); color:#0b2236;}
+  .wrap{max-width:1100px; margin:20px auto; padding:18px; box-sizing:border-box;}
+  .top{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  .title{font-weight:800; font-size:20px; color:var(--blue-900);}
+  .card{background:var(--panel); border-radius:var(--radius); padding:18px; box-shadow:var(--card-shadow);}
+  .meta{color:var(--muted); font-size:13px; margin-bottom:8px;}
+  #map{height:360px; border-radius:10px; margin-top:12px;}
+  .row{display:flex; gap:14px; margin-top:12px;}
+  .col{flex:1;}
+  .btn{padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-weight:700;}
+  .btn-save{background:var(--blue-900); color:white;}
+  .btn-back{background:#eef2f6; color:var(--muted);}
+  select{padding:8px 10px; border-radius:8px; border:1px solid #e6eef8; min-width:160px;}
+  .small-muted{color:var(--muted); font-size:13px;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="title">{{ report.get('title') }}</div>
+        <div class="meta">{{ report.get('incident_date') }} · {{ report.get('predicted_type') }} · Assigned: {{ report.get('assigned_police') or 'Unassigned' }}</div>
+      </div>
+      <div>
+        <a href="/police/dashboard" class="btn btn-back">Back</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; gap:18px;">
+        <div class="col" style="flex:1.4;">
+          <div class="small-muted">Description</div>
+          <div style="margin-top:6px;">{{ report.get('description') or 'No description provided.' }}</div>
+
+          <div class="small-muted" style="margin-top:10px;">Location</div>
+          <div style="margin-top:6px;">{{ report.get('location_name') or report.get('lat') ~ ', ' ~ report.get('lon') }}</div>
+
+          <div id="map"></div>
+        </div>
+
+        <div style="width:320px;">
+          <div class="small-muted">Report Details</div>
+          <div style="margin-top:8px;">
+            <div><strong>ID:</strong> {{ report.get('id') }}</div>
+            <div style="margin-top:6px;"><strong>Reported by:</strong> {{ report.get('name') }}</div>
+            <div style="margin-top:6px;"><strong>Incident date:</strong> {{ report.get('incident_date') }}</div>
+            <div style="margin-top:6px;"><strong>Type:</strong> {{ report.get('predicted_type') }}</div>
+            <div style="margin-top:6px;"><strong>Status:</strong> <span class="small-muted">{{ report.get('status') }}</span></div>
+          </div>
+
+          <form method="post" style="margin-top:12px;">
+            <label class="small-muted">Update status</label><br>
+            <select name="status">
+              <option value="Reported" {% if report.get('status')=='Reported' %}selected{% endif %}>Reported</option>
+              <option value="In Progress" {% if report.get('status')=='In Progress' %}selected{% endif %}>In Progress</option>
+              <option value="Closed" {% if report.get('status')=='Closed' %}selected{% endif %}>Closed</option>
+            </select>
+
+            <div style="margin-top:12px;">
+              <button class="btn btn-save" type="submit">Save</button>
+              <a href="/police/dashboard" class="btn btn-back" style="margin-left:8px;">Cancel</a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  (function(){
+    var lat = parseFloat("{{ report.get('lat') or 0 }}");
+    var lon = parseFloat("{{ report.get('lon') or 0 }}");
+    if (!lat || !lon) { lat = 22.5726; lon = 88.3639; } // fallback center
+    var map = L.map('map',{zoomControl:true}).setView([lat, lon], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+    L.marker([lat, lon]).addTo(map).bindPopup("Report location").openPopup();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Crime Reporting — Home</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#eef3f6;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#1e6fff;
+      --shadow:0 6px 24px rgba(12,24,40,0.08);
+      --radius:12px;
+      --container:1100px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:Inter,system-ui;
+      background:linear-gradient(180deg,#6c97cf 0%, #eef3f6 100%);
+      color:#0b1220;
+      line-height:1.45;
+    }
+
+    .wrap{ max-width:var(--container); margin:40px auto; padding:0 20px; }
+
+    /* NAVBAR */
+    header{
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:28px;
+    }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .logo{
+      width:56px; height:56px; border-radius:10px;
+      background:linear-gradient(135deg,#0b84ff,#1e6fff);
+      display:flex; justify-content:center; align-items:center;
+      color:#fff; font-size:20px; font-weight:800;
+      box-shadow:var(--shadow);
+    }
+
+    nav{ display:flex; gap:18px; align-items:center; }
+    nav a{
+      text-decoration:none; color:#122036; font-weight:600;
+      padding:10px 12px; border-radius:10px;
+    }
+    nav a:hover{ background:rgba(11,24,40,0.05); }
+
+    .btn{
+      padding:10px 16px; border-radius:10px; cursor:pointer;
+      font-weight:600; border:1px solid transparent;
+    }
+    .btn-primary{ background:var(--accent); color:white; }
+    .btn-outline{ background:white; border:1px solid #dbe7fb; }
+
+    /* HERO */
+    .hero{
+      background:#3F647A;
+      border-radius:16px;
+      padding:44px;
+      display:flex;
+      gap:28px;
+      align-items:center;
+      box-shadow:var(--shadow);
+    }
+    .hero-left{ flex:1; }
+    .hero-left h1{ font-size:38px; margin:0 0 12px; color:white; }
+    .hero-left p{ color:white; margin-bottom:12px; }
+
+    .hotspot-box{
+      background:white; padding:15px 20px;
+      border-radius:10px; box-shadow:var(--shadow);
+      display:inline-block;
+      min-width:220px;
+    }
+
+    .hero-right img{
+      width:320px; border-radius:12px;
+    }
+
+    /* SERVICES */
+    .services{
+      max-width:var(--container);
+      margin:40px auto;
+      padding:10px 20px;
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:20px;
+    }
+    .service-card{
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:flex-start;
+      gap:16px;
+    }
+    .service-icon{
+      width:40px; height:40px;
+      border-radius:8px;
+      background:#eaf2ff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px;
+    }
+
+    /* ABOUT */
+    .about{
+      max-width:var(--container);
+      margin:40px auto;
+      padding:20px;
+    }
+
+    /* CONTACT */
+    .contact{
+      max-width:var(--container);
+      margin:40px auto;
+      padding:20px;
+      display:flex;
+      gap:30px;
+    }
+    .contact .left{ flex:2; }
+    .contact .right{ flex:1; }
+
+    .form-row{
+      display:flex; gap:10px;
+    }
+    input, textarea{
+      width:100%; padding:10px; border-radius:10px;
+      border:1px solid #ddd; font-family:Inter;
+    }
+    textarea{ height:120px; }
+
+    footer{
+      max-width:var(--container);
+      margin:40px auto;
+      padding:20px;
+      text-align:center;
+      color:#555;
+    }
+
+    /* SOS OVERLAY */
+    #sos-overlay{
+      position:fixed; inset:0; background:rgba(0,0,0,0.55);
+      display:none; align-items:center; justify-content:center;
+      z-index:2000;
+    }
+    .sos-modal{
+      background:white; width:340px; padding:20px; border-radius:14px;
+      text-align:center; box-shadow:0 12px 48px rgba(0,0,0,0.35);
+      font-family:Inter;
+    }
+    .sos-count{
+      font-size:42px; font-weight:800; color:#ff3b3b;
+      margin:10px 0;
+    }
+    .sos-actions{
+      display:flex; gap:10px; justify-content:center; margin-top:14px;
+    }
+    .sos-actions button{
+      padding:10px 14px; border-radius:10px; border:0;
+      cursor:pointer; font-weight:700; font-size:14px;
+    }
+    .btn-cancel{ background:#ddd; color:#222; }
+    .btn-send{ background:#ff3b3b; color:white; }
+    
+    /* DROPDOWN MENU */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown button {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      min-width: 160px;
+      background: white;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      z-index: 9999;
+    }
+
+    .dropdown-content a {
+      padding: 10px 14px;
+      display: block;
+      text-decoration: none;
+      color: #122036;
+      font-weight: 500;
+    }
+
+    .dropdown-content a:hover {
+      background: #eef3f6;
+    } 
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+
+  </style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <!-- NAVIGATION -->
+  <header>
+    <div class="brand">
+      <div class="logo">C</div>
+      <div>
+        <strong>Crime</strong><br>
+        <small style="color:black;">Report • Alert • Assist</small>
+      </div>
+    </div>
+
+    <nav>
+      <a href="/">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="/summary">Summary</a>
+      <a href="/news">News</a>
+
+
+      {% if user %}
+        <span>Hi, {{ user.name }}</span>
+        <a href="/logout" class="btn btn-outline">Logout</a>
+
+      {% else %}
+
+    <!-- LOGIN DROPDOWN -->
+        <div class="dropdown">
+          <button class="btn btn-outline">Login ▾</button>
+          <div class="dropdown-content">
+            <a href="/login/user">User Login</a>
+            <a href="/login/police">Police Login</a>
+          </div>
+        </div>
+
+    <!-- REGISTER DROPDOWN -->
+        <div class="dropdown">
+          <button class="btn btn-primary">Register ▾</button>
+          <div class="dropdown-content">
+            <a href="/register/user">User Register</a>
+            <a href="/register/police">Police Register</a>
+          </div>
+        </div>
+
+      {% endif %}
+
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-left">
+
+      <h1>Report a Crime<br>Instantly & Securely</h1>
+      
+
+      <p>Fast reporting, accurate location assignment and immediate alerts — empowering communities to stay safe.</p>
+
+      <div style="display:flex; gap:12px;">
+        <button class="btn btn-primary" onclick="location.href='/report/new'">Report Crime</button>
+
+        {% if not user %}
+          <button class="btn btn-outline" onclick="location.href='/login/user'">Login</button>
+        {% endif %}
+      </div>
+
+      <div style="margin-top:18px;">
+        <button id="sosBtn"
+          style="
+            width:80px; height:80px; border-radius:50%;
+            background:#ff3b3b; color:white;
+            font-size:22px; font-weight:700;
+            border:none; cursor:pointer;
+            box-shadow:0 6px 18px rgba(255,0,0,0.35);
+          ">
+          SOS
+        </button>
+      </div>
+
+
+      <!-- Hotspots + Dashboard -->
+      <div style="margin-top:20px; display:flex; gap:14px; align-items:center;">
+
+        <div class="hotspot-box">
+          <strong>Hotspots:</strong><br>
+          <a href="/hotspots/map" style="color:#0b84ff; font-weight:600;">View Hotspots on Map →</a>
+        </div>
+
+        {% if user %}
+          {% if user.role == 'user' %}
+            <button class="btn btn-outline"
+                    style="background:white; border:1px solid #ccc; color:#0b1220; height:52px;"
+                    onclick="location.href='{{ url_for('user_dashboard') }}'">
+              Go to Dashboard
+            </button>
+          {% else %}
+            <button class="btn btn-outline"
+                    style="background:white; border:1px solid #ccc; color:#0b1220; height:52px;"
+                    onclick="location.href='{{ url_for('police_dashboard') }}'">
+              Go to Dashboard
+            </button>
+          {% endif %}
+        {% endif %}
+      </div>
+
+    </div>
+
+    <div class="hero-right">
+      <img src="{{ url_for('static', filename='image/police1.png') }}" alt="Police Officer">
+    </div>
+
+  </section>
+
+</div>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+
+  <div class="service-card">
+    <div class="service-icon">!</div>
+    <div class="service-content">
+      <h4>Crime Reporting</h4>
+      <p>File reports with text, photos and location. Multiple languages supported.</p>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <div class="service-icon">⚠</div>
+    <div class="service-content">
+      <h4>Emergency Alerts</h4>
+      <p>Instant SOS alerts sent to police and nearby users.</p>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <div class="service-icon">🛡</div>
+    <div class="service-content">
+      <h4>Police Assistance</h4>
+      <p>Nearest police station detection & automatic assignment.</p>
+    </div>
+  </div>
+
+  <div class="service-card">
+    <div class="service-icon">🤝</div>
+    <div class="service-content">
+      <h4>Community Support</h4>
+      <p>Hotspot maps & analytics for prevention and safety.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <div class="about-text">
+    <h3>About the Project</h3>
+    <p>This platform enables citizens to file crime reports, auto-detect nearest police stations, and offers SOS emergency alerts and analytics.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="left">
+    <h4>Contact & Support</h4>
+    <form>
+      <div class="form-row">
+        <input type="text" placeholder="Your name" required>
+        <input type="email" placeholder="Email address" required>
+      </div>
+      <input style="margin-top:10px" type="text" placeholder="Subject">
+      <textarea style="margin-top:10px" placeholder="Your message" required></textarea>
+
+      <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end">
+        <button class="btn btn-outline" type="reset">Reset</button>
+        <button class="btn btn-primary" type="submit">Send</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="right">
+    <h5>Office</h5>
+    <p>Bengaluru, India</p>
+    <p>Email: support@crime.example</p>
+    <p>Phone: +91 80 2555 5555</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  © <span id="year"></span> Crime. All rights reserved.
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+<script>
+document.getElementById("sosBtn").onclick = function() {
+
+    if (!navigator.geolocation) {
+        alert("GPS not supported on this device.");
+        window.location.href = "/sos";
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(pos) {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+
+            // Redirect with GPS
+            window.location.href = `/sos?lat=${lat}&lon=${lon}`;
+        },
+        function() {
+            alert("Unable to fetch GPS. Sending SOS without location.");
+            window.location.href = "/sos";
+        },
+        { timeout: 8000 }
+    );
+};
+</script>
+
+<!-- SOS CONFIRMATION MODAL -->
+<div id="sos-overlay">
+  <div class="sos-modal">
+    <h3 style="margin:0;">Confirm SOS</h3>
+    <p style="color:#444; font-size:14px;">A distress alert will be sent with your current GPS location.</p>
+
+    <div class="sos-count" id="sos-count">3</div>
+    <p style="color:#777; font-size:13px;">Auto-sending in <span id="sos-timer">3</span> seconds</p>
+
+    <div class="sos-actions">
+      <button class="btn-cancel" id="sos-cancel">Cancel</button>
+      <button class="btn-send" id="sos-confirm">Send Now</button>
+      <button id="sosBtn" class="btn btn-danger" type="button">SOS</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/sos.js') }}"></script>
+
+<div id="sos-overlay" style="display:none; align-items:center; justify-content:center; position:fixed; inset:0; z-index:2000;">
+  <div class="sos-modal" style="background:white; width:340px; padding:20px; border-radius:14px; text-align:center;">
+    <h3 style="margin:0;">Confirm SOS</h3>
+    <p style="color:#444; font-size:14px;">A distress alert will be sent with your GPS location.</p>
+    <div class="sos-count" id="sos-count" style="font-size:42px; font-weight:800; color:#ff3b3b; margin:10px 0;">3</div>
+    <p style="color:#777; font-size:13px;">Auto-sending in <span id="sos-timer">3</span> seconds</p>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:14px;">
+      <button id="sos-cancel" style="padding:10px 14px; border-radius:10px; background:#ddd; border:0;">Cancel</button>
+      <button id="sos-confirm" style="padding:10px 14px; border-radius:10px; background:#ff3b3b; color:#fff; border:0;">Send Now</button>
+    </div>
+  </div>
+</div>
+
+<audio id="sos-audio" preload="auto">
+  <source src="{{ url_for('static', filename='sounds/sos_alert.mp3') }}" type="audio/mpeg">
+</audio>
+
+
+</body>
+</html>

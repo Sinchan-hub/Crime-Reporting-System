@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <title>My SOS History</title>
+  <style>
+    body { font-family: Inter, sans-serif; background:#edf1f5; padding:20px; }
+    h2 { margin-bottom: 20px; }
+    table { width:100%; background:white; border-collapse:collapse; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+    th, td { padding:12px; border-bottom:1px solid #eee; }
+    th { background:#0b84ff; color:white; text-align:left; }
+    .status-active { color:#ff3333; font-weight:bold; }
+    .status-resolved { color:#0a8a2a; font-weight:bold; }
+  </style>
+</head>
+<body>
+
+<h2>My SOS History</h2>
+
+<table id="sosTable">
+  <tr>
+    <th>SOS ID</th>
+    <th>Location</th>
+    <th>Triggered At</th>
+    <th>Status</th>
+  </tr>
+</table>
+
+<script>
+fetch('/api/sos/history')
+  .then(r => r.json())
+  .then(data => {
+    let table = document.getElementById("sosTable");
+
+    data.forEach(s => {
+      let row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${s.id}</td>
+        <td>${s.lat}, ${s.lon}</td>
+        <td>${s.created_at}</td>
+        <td class="${s.status === 'active' ? 'status-active' : 'status-resolved'}">
+            ${s.status}
+        </td>
+      `;
+
+      table.appendChild(row);
+    });
+  });
+</script>
+
+</body>
+</html>

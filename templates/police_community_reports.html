@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Community Reports — Police Portal</title>
+
+<style>
+    :root{
+      --blue-900:#18324b;
+      --blue-700:#18324b;
+      --bg:#eaf2fb;
+      --panel:#ffffff;
+      --muted:#6b7280;
+      --card-shadow:0 8px 28px rgba(16,24,40,0.06);
+      --radius:12px;
+    }
+
+    body{
+        margin:0;
+        padding:30px;
+        background:var(--bg);
+        font-family:Inter, system-ui;
+    }
+
+    .container{
+        max-width:900px;
+        margin:auto;
+    }
+
+    h1{
+        margin:0 0 20px 0;
+        color:var(--blue-900);
+        font-size:26px;
+        font-weight:800;
+    }
+
+    .back-btn{
+        background:var(--blue-900);
+        color:white;
+        padding:8px 14px;
+        border-radius:8px;
+        text-decoration:none;
+        font-weight:600;
+        margin-bottom:20px;
+        display:inline-block;
+    }
+
+    .report-card{
+        background:white;
+        padding:18px;
+        border-radius:12px;
+        margin-bottom:16px;
+        box-shadow:var(--card-shadow);
+    }
+
+    .report-title{
+        font-size:18px;
+        font-weight:800;
+        margin-bottom:6px;
+    }
+
+    .meta{
+        font-size:13px;
+        color:var(--muted);
+        margin-bottom:10px;
+    }
+
+    .btn-view{
+        background:#0b84ff;
+        color:white;
+        padding:8px 14px;
+        border-radius:8px;
+        text-decoration:none;
+        font-weight:600;
+        font-size:14px;
+    }
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <a href="/police/dashboard" class="back-btn">← Back to Dashboard</a>
+
+    <h1>All Community Reports</h1>
+
+    {% if reports %}
+        {% for r in reports %}
+        <div class="report-card">
+            <div class="report-title">{{ r.title }}</div>
+
+            <div class="meta">
+                {{ r.location_name or "Unknown" }} • {{ r.created_at }}<br>
+                Reported by: <b>{{ r.name }}</b>
+            </div>
+
+            <a class="btn-view" href="/police/report/{{ r.id }}">View Report</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color:var(--muted); font-size:15px;">No community reports found.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

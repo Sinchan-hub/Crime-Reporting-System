@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Police Dashboard — {{ station_name }}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root{
+    --blue-900:#18324b;
+    --blue-700:#18324b;
+    --bg:#eaf2fb;
+    --panel:#ffffff;
+    --muted:#6b7280;
+    --card-shadow: 0 8px 28px rgba(16,24,40,0.06);
+    --radius:12px;
+    --sidebar-width:260px;
+  }
+  html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:#0b2236;}
+  a{color:inherit; text-decoration:none;}
+  .app {display:flex; min-height:100vh;}
+
+  /* SIDEBAR */
+  .sidebar {
+    width:var(--sidebar-width);
+    background:linear-gradient(180deg,var(--blue-900),var(--blue-700));
+    color:white;
+    padding:26px 18px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .brand { display:flex; align-items:center; gap:12px; }
+  .brand .logo {
+    width:44px; height:44px; border-radius:10px;
+    background:rgba(255,255,255,0.12);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800;
+  }
+  .brand h2{margin:0; font-size:16px; font-weight:800;}
+
+  .nav {margin-top:8px; display:flex; flex-direction:column; gap:6px;}
+  .nav a.item {
+    padding:10px 12px;
+    border-radius:10px;
+    color:white;
+    font-weight:600;
+  }
+  .nav a.item:hover{background:rgba(255,255,255,0.06);}
+  .nav a.active{background:rgba(255,255,255,0.12);}
+
+  /* MAIN */
+  .main {flex:1; padding:28px;}
+  header{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  header h1{margin:0; font-size:20px; font-weight:800;}
+  header .user {color:var(--muted); font-weight:600;}
+
+  .layout {display:grid; grid-template-columns:320px 1fr; gap:18px;}
+  .panel {
+    background:var(--panel);
+    border-radius:var(--radius);
+    padding:16px;
+    box-shadow:var(--card-shadow);
+  }
+  .stats {display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .stat {
+    background:#f7fbff; padding:12px; border-radius:10px;
+    font-weight:700; color:var(--blue-900);
+  }
+
+  .list {display:flex; flex-direction:column; gap:10px;}
+  .report-item {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px;
+    border-radius:10px;
+    background:#fbfdff;
+    box-shadow:0 6px 18px rgba(15,25,35,0.04);
+  }
+  .report-meta {color:var(--muted); font-size:13px;}
+  .btn {padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700;}
+  .btn-view {background:var(--blue-900); color:white;}
+
+  .logout {
+    margin-top:auto;
+    background:#ff5b5b;
+    text-align:center;
+    padding:8px 12px;
+    border-radius:8px;
+    color:white;
+    font-weight:600;
+  }
+
+  .section-title {display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .small-muted{color:var(--muted); font-weight:600; font-size:13px;}
+
+  @media (max-width:960px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+  }
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">C</div>
+      <div>
+        <div style="font-size:14px; font-weight:800;">Crime</div>
+        <div style="font-size:12px; opacity:0.85;">Police Portal</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="/police/dashboard" class="item active">Dashboard</a>
+      <a href="#assigned" class="item">Assigned Reports</a>
+      <a href="/police/community_reports" class="item">Community Reports</a>
+      <a href="/police/sos" class="item">Live SOS</a>
+      <a href="/police/settings" class="item">Settings</a>
+    </nav>
+
+    <div style="font-size:13px;">
+      <div style="font-weight:700;">Officer</div>
+      <div>{{ user.get('name') }}</div>
+      <div style="font-size:12px; opacity:0.9;">{{ station_name }}</div>
+    </div>
+
+    <a class="logout" href="/logout">Logout</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <header>
+      <h1>Police Dashboard — {{ station_name }}</h1>
+      <div class="user">Officer: {{ user.get('name') }}</div>
+    </header>
+
+    <div class="layout">
+
+      <!-- LEFT: Stats + Notifications -->
+      <div>
+        <div class="panel">
+          <div style="font-weight:800;">Quick Stats</div>
+          <div class="stats">
+            <div class="stat">Total<br><div style="font-size:18px;">{{ total_reports }}</div></div>
+            <div class="stat">Assigned<br><div style="font-size:18px;">{{ assigned_count }}</div></div>
+            <div class="stat">In Progress<br><div style="font-size:18px;">{{ in_progress_count }}</div></div>
+            <div class="stat">Closed<br><div style="font-size:18px;">{{ closed_count }}</div></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px;">
+          <div style="font-weight:800;">Notifications</div>
+          {% if notifs %}
+            <ul style="padding-left:16px;">
+              {% for n in notifs[:6] %}
+              <li>{{ n.get('message') or n.get('text') }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="small-muted">No notifications</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- RIGHT: Assigned + Community Reports + SOS Alerts -->
+      <div>
+
+        <!-- ASSIGNED -->
+        <div id="assigned" class="panel" style="margin-bottom:14px;">
+          <div class="section-title">
+            <strong style="font-size:22px;">Assigned Reports</strong>
+            <div class="small-muted">Assigned to {{ station_name }}</div>
+          </div>
+
+          {% if assigned_reports %}
+            <div class="list">
+              {% for r in assigned_reports %}
+              <div class="report-item">
+                <div>
+                  <div style="font-weight:800;">{{ r.title }}</div>
+                  <div class="report-meta">{{ r.incident_date }} · {{ r.predicted_type }}</div>
+                </div>
+                <a class="btn btn-view" href="/police/report/{{ r.id }}">View</a>
+              </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="small-muted">No assigned reports.</div>
+          {% endif %}
+        </div>
+
+        <!-- COMMUNITY REPORTS -->
+        <div class="panel">
+          <div class="section-title">
+            <strong style="font-size:22px;">Community Reports</strong>
+            <a href="/police/community_reports"
+               style="padding:14px 18px; background:#0b84ff; color:white; border-radius:6px; font-weight:600;">
+               View All →
+            </a>
+          </div>
+
+          {% if recent_reports %}
+            <div class="list">
+              {% for r in recent_reports %}
+              <div class="report-item">
+                <div>
+                  <div style="font-weight:800;">{{ r.title }}</div>
+                  <div class="report-meta">{{ r.incident_date }} · {{ r.predicted_type }}</div>
+                </div>
+                <a class="btn btn-view" href="/police/report/{{ r.id }}">View</a>
+              </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="small-muted"></div>
+          {% endif %}
+        </div>
+
+        <!-- SOS ALERTS (NO MAP) -->
+        <div class="panel" style="margin-top:18px;">
+          <h3>SOS Alerts</h3>
+
+          {% if sos_alerts %}
+            <div class="list">
+              {% for s in sos_alerts %}
+              <div class="report-item">
+                <div>
+                  <strong>SOS from {{ s.user_name }}</strong><br>
+                  <small>{{ s.timestamp }}</small><br>
+                  <small>📍 {{ s.lat }}, {{ s.lon }}</small>
+                </div>
+                <a class="btn btn-view"
+                   href="https://www.google.com/maps?q={{ s.lat }},{{ s.lon }}"
+                   target="_blank">Locate</a>
+              </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="small-muted">No SOS alerts available.</p>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+id,report_id,police_id,message,created_at,is_sos,seen
+ca7a2d03,193e18fb,MG01,New report sexually assualt at jss,2025-11-13T19:29:18.305858,0,False
+8b9c7cd9,b02cc8b2,MG01,New report murder at jss,2025-11-13T19:31:32.485769,0,False
+35c4a639,,MG01,SOS Alert from Sinchan birsal (09036719475),2025-11-13 19:38:57.397095,1,0
+88f94de5,9d98b36b,Kengeri Police Station,New report murder at Jayanagar,2025-11-14T17:24:52.857057,0,False
+8b8a7b9e,fdb88db2,Ashok Nagar Police Station,New report robbery at Rajarajeshwari nagar,2025-11-14T17:42:50.658160,0,False
+6aa03961,c1416c92,Kengeri Police Station,"New report theft at 12.901103,77.504033",2025-11-15T05:56:34.113845,0,False
+f0ab90b6,6ea80057,Kengeri Police Station,"New report Theft at 12.901184,77.504077",2025-11-15T07:10:25.978213,0,False
+25570655,d1e3128e,Kengeri Police Station,"New report Murder at 12.901161,77.504056",2025-11-15T07:11:39.471802,0,False
+57344e90,5a5cd6aa,Kengeri Police Station,"New report Vandalism at 12.901172,77.504075",2025-11-15T15:28:51.549848,0,False
+a5cda463,4d4f752a,Ashok Nagar Police Station,New report money stolen at Jayanagar,2025-11-15T15:44:45.679684,0,False
+4e5f2070,2785a3c8,Ashoknagar Police Station,New report Robbery at JP nagar,2025-11-16T06:12:42.617479,0,False
+ce7264d0,f9805a23,Uttarahalli Police Station,"New report Robbery at 12.901148,77.504045",2025-11-16T06:24:17.310870,0,False
+396d4140,bfee4d3a,Uttarahalli Police Station,"New report theft at 12.901148,77.504045",2025-11-16T06:24:59.642480,0,False
+1482a071,4fbbcf46,Uttarahalli Police Station,"New report Robbery at 12.901116,77.504074",2025-11-16T06:26:44.441025,0,False
+715e1ff3,86a9e3f7,Uttarahalli Police Station,"New report vandalism at 12.901099,77.504078",2025-11-16T06:28:08.412685,0,False
+d4ea32f0,2d8b7f96,Uttarahalli Police Station,"New report theft at 12.901064,77.504022",2025-11-16T06:29:24.514365,0,False
+29cb82c4,7ef93333,Uttarahalli Police Station,"New report theft at 12.901176,77.504114",2025-11-16T06:32:07.315188,0,False
+140c2575,ecf3872f,Uttarahalli Police Station,"New report robbery at 12.901237,77.504128",2025-11-16T06:42:31.014270,0,False
+c205b195,fc934d3d,Uttarahalli Police Station,"New report theft at 12.901047,77.504002",2025-11-16T06:46:03.041332,0,False
+9a42a2f2,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-20T14:46:10.110102,1,False
+18b5c606,2e450c52,Uttarahalli Police Station,New report Theft at kengeri,2025-11-22T15:30:42.626864,0,False
+7f3795ec,0b0cc43a,Uttarahalli Police Station,"New report assault at 12.901120,77.504120",2025-11-22T21:00:37.628636,0,False
+6d63aeb4,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T11:32:55.529764,1,False
+6a2e1ec1,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T11:40:42.889276,1,False
+8c9220bc,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T11:55:35.841442,1,False
+02ccd46b,,Uttarahalli Police Station,SOS Alert from Sinu (9036719475),2025-11-23T11:55:35.956374,1,False
+224a654c,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T11:57:20.493088,1,False
+195abea5,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T12:02:55.195554,1,False
+04a31697,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T12:09:19.583543,1,False
+6482dd47,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T12:09:21.053434,1,False
+ad6345cb,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-23T14:15:13.457314,1,False
+0cf4ac7f,,Uttarahalli Police Station,SOS Alert from Sinu (9036719475),2025-11-23T14:15:13.493844,1,False
+0e24ebac,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-24T16:47:55.514503,1,False
+6ae1b2d8,,Uttarahalli Police Station,SOS Alert from Sinu (9036719475),2025-11-24T16:47:55.528248,1,False
+3489aa36,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-24T17:11:19.772912,1,False
+3994de98,,Uttarahalli Police Station,SOS Alert from Sinu (9036719475),2025-11-24T17:11:19.843037,1,False
+5e3266aa,,Uttarahalli Police Station,SOS Alert from Sinu (9036719475),2025-11-24T17:31:55.633496,1,False
+c3f93bb0,,Ashoknagar Police Station,SOS Alert from Sinu (9036719475),2025-11-24T17:32:02.665723,1,False
+b0297a45,,Uttarahalli Police Station,SOS Alert from Sinu (9036719475),2025-11-24T17:32:02.742381,1,False
+8ba668d9,,Ashoknagar Police Station,"SOS Alert from Sinu (9036719475) at ,",2025-11-25T06:55:46.344664+00:00,1,False
+c3c9a5f0,,Uttarahalli Police Station,"SOS Alert from Sinu (9036719475) at 12.900937955471388,77.50408282969492",2025-11-25T06:55:46.405303+00:00,1,False
+192d5bc5,,Uttarahalli Police Station,"SOS Alert from Sinu (9036719475) at 12.901092039676115,77.50419069673602",2025-11-25T08:49:51.945337+00:00,1,False
+d8088a27,,Ashoknagar Police Station,"SOS Alert from Sinu (9036719475) at ,",2025-11-25T12:48:21.172797+00:00,1,False
+bc904c28,,Uttarahalli Police Station,"SOS Alert from Sinu (9036719475) at 12.90115236793781,77.50413446856878",2025-11-25T12:48:21.229059+00:00,1,False
+0e98b479,bc1eda6a,Uttarahalli Police Station,New report Robbery at kengeri,2025-11-26T05:58:15.064493,0,False
+f4ac1ed4,c2e43f80,Uttarahalli Police Station,New report Robbery at kengeri,2025-11-26T06:41:05.738140,0,False
+07ee0896,f0f1cbcf,Uttarahalli Police Station,New report robbery at kengeri,2025-11-26T06:44:51.862743,0,False
+30fc88f3,4d82c027,Uttarahalli Police Station,New report robbed at jss,2025-11-26T09:58:15.738247,0,False
+f7a07370,27b45008,Ashoknagar Police Station,"New report assault at ,",2025-11-26T10:02:56.215024,0,False
+adec2924,3b7d3789,Uttarahalli Police Station,New report robbery at jss,2025-11-26T11:09:07.282515,0,False
+a73518a6,70a44a54,Uttarahalli Police Station,New report Assault incident at jss,2025-11-26T11:11:25.030695,0,False
+1cc30f08,74235da8,Uttarahalli Police Station,"New report argument at 12.901003,77.504106",2025-11-26T11:13:55.993388,0,False
+968d6980,a8dba82e,Ashoknagar Police Station,New report attack at Majestic,2025-11-26T11:14:53.816379,0,False
+2dd057be,ccbefb5c,Uttarahalli Police Station,"New report robbed at 12.901204,77.504172",2025-11-26T12:22:34.208134,0,False
+c7b28731,,Ashoknagar Police Station,"SOS Alert from Sinu (9036719475) at ,",2025-11-26T12:51:04.658913+00:00,1,False
+e20917f9,,Uttarahalli Police Station,"SOS Alert from Sinu (9036719475) at 12.901071959591835,77.50410398113843",2025-11-26T12:51:04.699122+00:00,1,False
+a52f49d0,,Uttarahalli Police Station,"SOS Alert from Sinu (9036719475) at 12.901071959591835,77.50410398113843",2025-11-26T12:51:24.244506+00:00,1,False
+793b4693,,Ashoknagar Police Station,"SOS Alert from Sinu (9036719475) at ,",2025-11-27T04:19:45.361683+00:00,1,False
+376d4b4d,,Ashoknagar Police Station,"SOS Alert from Sinu (9036719475) at ,",2025-11-27T04:26:16.980090+00:00,1,False
+ed17748a,,Ashoknagar Police Station,"SOS Alert from Sinu (9036719475) at ,",2025-11-27T04:26:29.508669+00:00,1,False
+ab63e5d5,,Ashoknagar Police Station,"SOS Alert from Sinu (9036719475) at ,",2025-11-27T04:27:15.122861+00:00,1,False
+5544d245,c85518a5,Uttarahalli Police Station,"New report Theft at 12.901092,77.504199",2025-11-27T04:51:09.095123,0,False
+d37e6625,,Ashoknagar Police Station,"SOS Alert from Sinchan birsal (9036719475) at ,",2025-11-27T04:52:06.310134+00:00,1,False
+0801ba19,,Uttarahalli Police Station,"SOS Alert from Sinchan birsal (9036719475) at 12.901113367605497,77.50420239900977",2025-11-27T04:52:10.119072+00:00,1,False
+dd2cd02d,e9d5673f,Ashoknagar Police Station,"New report Murder at ,",2025-11-27T04:56:30.438059,0,False
+5a96013b,c10f098e,Uttarahalli Police Station,New report Bag Snatching at kengeri,2025-11-27T05:00:27.913590,0,False
+9753da73,c0b3a346,Ashoknagar Police Station,New report Bag snatching at Koramangala Sony Signal,2025-11-27T05:01:25.125638,0,False
+1a96fdb2,29e4cc98,Ashoknagar Police Station,New report Street Fight at Whitefield Forum Mall,2025-11-27T05:02:23.205791,0,False
+c1f2ecbd,6d0bdd30,Ashoknagar Police Station,New report Eve Teasing at MG Road Metro,2025-11-27T05:03:24.987261,0,False
+8b8fdd0b,71fc2fdd,Ashoknagar Police Station,"New report Online Shopping Fraud at ,",2025-11-27T05:04:23.824282,0,False
+8afeae93,952dfa97,Uttarahalli Police Station,New report theft at kengeri,2025-11-27T06:13:36.523978,0,False
+816bf6be,,Ashoknagar Police Station,"SOS Alert from Sinchan birsal (9036719475) at ,",2025-11-27T06:18:49.475839+00:00,1,False
+055247c2,,Ashoknagar Police Station,"SOS Alert from Sinchan birsal (9036719475) at ,",2025-11-27T06:18:50.428768+00:00,1,False
+4a1919b9,,Ashoknagar Police Station,"SOS Alert from Sinchan birsal (9036719475) at ,",2025-11-27T06:19:00.472058+00:00,1,False
+d7b67e28,,Ashoknagar Police Station,"SOS Alert from Sinchan birsal (9036719475) at ,",2025-11-27T06:19:01.445734+00:00,1,False

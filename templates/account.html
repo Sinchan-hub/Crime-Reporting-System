@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}My Account{% endblock %}
+
+{% block content %}
+
+<style>
+    .account-container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    }
+
+    .account-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .profile-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #dce7ff;
+        color: #1e6fff;
+        font-size: 32px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .label {
+        color: #6b7280; 
+        font-size: 14px;
+    }
+
+    .value {
+        color: #111827;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .btn-row {
+        margin-top: 25px;
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn-blue {
+        background: #0b84ff;
+        color: white;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .btn-light {
+        background: white;
+        border: 1px solid #d3d3d3;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #111;
+    }
+
+    .btn-red {
+        background: #ff4d4d;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+    }
+</style>
+
+<div class="account-container">
+
+    <h2 style="margin-bottom: 20px;">My Account</h2>
+
+    <div class="account-header">
+        <div class="profile-circle">{{ user.name[0] }}</div>
+        <div>
+            <div class="value" style="font-size:20px;">{{ user.name }}</div>
+            <div class="label">User Account</div>
+        </div>
+    </div>
+
+    <hr>
+
+    <p class="label">Email</p>
+    <p class="value">{{ user.email }}</p>
+
+    <p class="label">Phone</p>
+    <p class="value">{{ user.phone }}</p>
+
+    <p class="label">Member Since</p>
+    <p class="value">{{ user.created_at }}</p>
+
+    <div class="btn-row">
+        <button class="btn-blue" onclick="location.href='/account/change_password'">Change Password</button>
+        <button class="btn-light" onclick="location.href='/'">Back to Home</button>
+        <button class="btn-red" onclick="location.href='/logout'">Logout</button>
+    </div>
+
+</div>
+
+{% endblock %}

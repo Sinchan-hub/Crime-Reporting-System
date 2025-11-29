@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Crime Hotspots Map — Dashboard</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <!-- Heatmap plugin -->
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+    <style>
+        :root{
+            --bg: #eef3f6;
+            --panel: #ffffff;
+            --muted: #6b7280;
+            --accent: #0b84ff;
+            --theft: #f5c542;   /* yellow */
+            --assault: #ff8a33; /* orange */
+            --other: #9aa0a6;   /* grey */
+            --news: #1e90ff;    /* blue */
+            --hot: #e24b4b;     /* red */
+        }
+        html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:var(--bg); color:#0b1220;}
+        .container{max-width:1200px; margin:18px auto; display:flex; gap:16px; padding:12px; box-sizing:border-box;}
+        /* Sidebar */
+        .sidebar{
+            width:300px;
+            background:var(--panel);
+            border-radius:12px;
+            box-shadow:0 10px 30px rgba(12,24,40,0.06);
+            padding:14px;
+            box-sizing:border-box;
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+        }
+        .sidebar h3{margin:0; font-size:18px}
+        .stat-row{display:flex; justify-content:space-between; padding:10px 8px; border-radius:8px; background:linear-gradient(180deg,#fbfdff,#f4f8fb); font-weight:700;}
+        .stat-small{font-size:13px; color:var(--muted); font-weight:600}
+        .legend{margin-top:8px}
+        .legend .item{display:flex; align-items:center; gap:8px; margin:8px 0; font-size:14px}
+        .legend .dot{width:14px; height:14px; border-radius:50%}
+        .legend .rect{width:16px; height:12px; border-radius:4px}
+        .controls{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+        .control-btn{background:white; padding:6px 10px; border-radius:8px; border:1px solid #eef2f7; cursor:pointer; display:flex; gap:8px; align-items:center; font-weight:600}
+        .control-toggle{display:flex; gap:8px; align-items:center; font-size:14px}
+        /* Map area */
+        .map-wrap{flex:1; display:flex; flex-direction:column; gap:8px}
+        h2{margin:0 0 4px 0; text-align:center; font-size:22px}
+        #map{height:640px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.12); }
+        .footer-actions{display:flex; gap:10px; justify-content:center; margin-top:8px}
+        .btn-primary{background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700}
+        .note{font-size:13px; color:var(--muted); text-align:center}
+        /* responsive */
+        @media(max-width:1040px){
+            .container{flex-direction:column; align-items:stretch}
+            .sidebar{width:100%}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar" aria-label="Summary and controls">
+            <h3>Summary</h3>
+
+            <div class="stat-row">
+                <div>
+                    <div style="font-size:14px">Total user reports</div>
+                    <div class="stat-small" id="totalReports">—</div>
+                </div>
+                <div style="font-size:20px; font-weight:900" id="totalReportsVal">0</div>
+            </div>
+
+            <div class="stat-row">
+                <div>
+                    <div style="font-size:14px">Total news incidents</div>
+                    <div class="stat-small" id="totalNews">—</div>
+                </div>
+                <div style="font-size:20px; font-weight:900" id="totalNewsVal">0</div>
+            </div>
+
+            <div class="stat-row">
+                <div>
+                    <div style="font-size:14px">Total hotspots</div>
+                    <div class="stat-small" id="totalHotspots">—</div>
+                </div>
+                <div style="font-size:20px; font-weight:900" id="totalHotspotsVal">0</div>
+            </div>
+
+            <div style="margin-top:8px">
+                <div style="font-weight:800; margin-bottom:6px">Crime breakdown</div>
+                <div style="display:flex; flex-direction:column; gap:6px">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:8px">
+                            <div style="width:12px; height:12px; border-radius:50%; background:var(--theft)"></div>
+                            <div>Theft</div>
+                        </div>
+                        <div id="countTheft">0</div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:8px">
+                            <div style="width:12px; height:12px; border-radius:50%; background:var(--assault)"></div>
+                            <div>Assault</div>
+                        </div>
+                        <div id="countAssault">0</div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="display:flex; align-items:center; gap:8px">
+                            <div style="width:12px; height:12px; border-radius:50%; background:var(--other)"></div>
+                            <div>Other</div>
+                        </div>
+                        <div id="countOther">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:12px">
+                <div style="font-weight:800; margin-bottom:6px">Layers</div>
+                <div class="controls">
+                    <label class="control-btn"><input id="toggleHeat" type="checkbox" checked> <span style="margin-left:4px">Heatmap</span></label>
+                    <label class="control-btn"><input id="toggleCircles" type="checkbox" checked> <span style="margin-left:4px">Hotspot Circles</span></label>
+                    <label class="control-btn"><input id="toggleNews" type="checkbox" checked> <span style="margin-left:4px">News Markers</span></label>
+                </div>
+
+                <div style="font-weight:800; margin-top:10px; margin-bottom:6px">Crime type visibility</div>
+                <div class="controls">
+                    <label class="control-btn"><input id="toggleTheft" type="checkbox" checked> <span style="margin-left:4px">Theft</span></label>
+                    <label class="control-btn"><input id="toggleAssault" type="checkbox" checked> <span style="margin-left:4px">Assault</span></label>
+                    <label class="control-btn"><input id="toggleOther" type="checkbox" checked> <span style="margin-left:4px">Other</span></label>
+                </div>
+            </div>
+
+            <div style="margin-top:auto">
+                <div class="note">Auto-refresh every 2 minutes. Use toggles to filter layers.</div>
+                <div class="footer-actions">
+                    <button id="refreshBtn" class="btn-primary">Refresh Now</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAP AREA -->
+        <main class="map-wrap">
+            <h2>Crime Hotspots Map</h2>
+            <div id="map" role="application" aria-label="Hotspot map"></div>
+        </main>
+    </div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+<script>
+/*
+  Final upgraded hotspot map (left sidebar + legend toggles + crime-type colors + summary)
+  - Fetches:
+      /hotspots       -> combined array of [lat,lon]
+      /api/news       -> news items (lat, lon, title, url, published_at, is_hotspot)
+      /api/reports    -> optional; fallback to /data/reports.csv or /reports.csv (client-side CSV parse)
+  - Crime-type colors:
+      Theft  -> var(--theft)
+      Assault-> var(--assault)
+      Other  -> var(--other)
+  - Auto refresh: 2 minutes
+*/
+
+const COLORS = {
+  Theft: getComputedStyle(document.documentElement).getPropertyValue('--theft').trim() || '#f5c542',
+  Assault: getComputedStyle(document.documentElement).getPropertyValue('--assault').trim() || '#ff8a33',
+  Other: getComputedStyle(document.documentElement).getPropertyValue('--other').trim() || '#9aa0a6',
+  News: getComputedStyle(document.documentElement).getPropertyValue('--news').trim() || '#1e90ff',
+  Hot: getComputedStyle(document.documentElement).getPropertyValue('--hot').trim() || '#e24b4b'
+};
+
+let map = L.map('map', { zoomControl: true }).setView([22.5,79], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+// layer holders
+let heatLayer = null;
+let circlesLayer = L.layerGroup().addTo(map);
+let newsLayer = L.layerGroup().addTo(map);
+let theftLayer = L.layerGroup().addTo(map);
+let assaultLayer = L.layerGroup().addTo(map);
+let otherLayer = L.layerGroup().addTo(map);
+
+// UI elements
+const toggleHeat = document.getElementById('toggleHeat');
+const toggleCircles = document.getElementById('toggleCircles');
+const toggleNews = document.getElementById('toggleNews');
+const toggleTheft = document.getElementById('toggleTheft');
+const toggleAssault = document.getElementById('toggleAssault');
+const toggleOther = document.getElementById('toggleOther');
+const refreshBtn = document.getElementById('refreshBtn');
+
+// summary elements
+const totalReportsVal = document.getElementById('totalReportsVal');
+const totalNewsVal = document.getElementById('totalNewsVal');
+const totalHotspotsVal = document.getElementById('totalHotspotsVal');
+const countTheftEl = document.getElementById('countTheft');
+const countAssaultEl = document.getElementById('countAssault');
+const countOtherEl = document.getElementById('countOther');
+
+let cachedReports = []; // array of {lat,lon,predicted_type,...}
+let cachedNews = [];
+let cachedHotspots = [];
+
+// safe parse float
+function safeNum(v){ try { return v===undefined||v===''?null:parseFloat(v); } catch(e){return null;} }
+
+// try to fetch /api/reports, else fetch CSV fallback
+async function loadReports() {
+  // try JSON endpoint first
+  try {
+    const res = await fetch('/api/reports');
+    if (res.ok) {
+      const data = await res.json();
+      // Expect array of objects with lat, lon, predicted_type
+      cachedReports = data.map(r => {
+        return { lat: safeNum(r.lat), lon: safeNum(r.lon), predicted_type: r.predicted_type || r.type || r.title || 'Other', raw: r };
+      }).filter(r => r.lat && r.lon);
+      return;
+    }
+  } catch(e){
+    // continue to CSV fallback
+  }
+
+  // try common CSV locations
+  const csvPaths = ['/data/reports.csv','/reports.csv','/data/reports.csv'];
+  for (const p of csvPaths) {
+    try {
+      const res = await fetch(p);
+      if (!res.ok) continue;
+      const txt = await res.text();
+      parseReportsCSV(txt);
+      return;
+    } catch(e){}
+  }
+  // if not found, set empty
+  cachedReports = [];
+}
+
+// parse CSV client-side (expects header with predicted_type, lat, lon)
+function parseReportsCSV(text) {
+  const lines = text.split(/\r?\n/).filter(Boolean);
+  if (lines.length < 2) { cachedReports = []; return; }
+  const header = lines[0].split(',');
+  const idLat = header.findIndex(h => h.trim().toLowerCase()==='lat');
+  const idLon = header.findIndex(h => h.trim().toLowerCase()==='lon');
+  const idType = header.findIndex(h => h.trim().toLowerCase()==='predicted_type' || h.trim().toLowerCase()==='crime_type' || h.trim().toLowerCase()==='type' || h.trim().toLowerCase()==='title');
+  const arr = [];
+  for (let i=1;i<lines.length;i++){
+    const cols = lines[i].split(',');
+    if (cols.length<=Math.max(idLat,idLon)) continue;
+    const lat = safeNum(cols[idLat]);
+    const lon = safeNum(cols[idLon]);
+    const type = idType>=0 ? (cols[idType]||'').trim() : 'Other';
+    if (lat && lon) arr.push({lat,lon,predicted_type:type, raw: cols});
+  }
+  cachedReports = arr;
+}
+
+// load news items
+async function loadNews() {
+  try {
+    const res = await fetch('/api/news');
+    if (!res.ok) { cachedNews = []; return; }
+    const data = await res.json();
+    cachedNews = (Array.isArray(data) ? data : []).map(n => {
+      return { lat: safeNum(n.lat), lon: safeNum(n.lon), title: n.title||'', url: n.url||'', predicted_type: n.predicted_type||n.category||'News', raw:n, published_at:n.published_at||n.publishedAt || ''};
+    }).filter(n => n.lat && n.lon);
+  } catch(e){
+    cachedNews = [];
+  }
+}
+
+// load hotspots (raw points array)
+async function loadHotspots() {
+  try {
+    const res = await fetch('/hotspots');
+    if (!res.ok) { cachedHotspots = []; return; }
+    const pts = await res.json();
+    cachedHotspots = (Array.isArray(pts)?pts:[]).map(p => [safeNum(p[0]), safeNum(p[1])]).filter(p => p[0] && p[1] && p[0]>=6 && p[0]<=38 && p[1]>=68 && p[1]<=98);
+  } catch(e){ cachedHotspots = []; }
+}
+
+// clear all crime-type layers
+function clearCrimeLayers() {
+  theftLayer.clearLayers();
+  assaultLayer.clearLayers();
+  otherLayer.clearLayers();
+  newsLayer.clearLayers();
+}
+
+// draw crime-type markers from cachedReports and cachedNews
+function drawCrimeMarkers() {
+  clearCrimeLayers();
+  // user reports
+  for (const r of cachedReports) {
+    const type = (r.predicted_type||'').trim().toLowerCase();
+    const lat = r.lat, lon = r.lon;
+    const popup = `<b>${r.predicted_type || 'Report'}</b><br>${r.raw && r.raw.title ? r.raw.title : ''}`;
+    if (type.includes('theft')) {
+      const m = L.circleMarker([lat,lon], { radius:6, color: COLORS.Theft, fillColor: COLORS.Theft, fillOpacity:0.9 }).bindPopup(popup);
+      theftLayer.addLayer(m);
+    } else if (type.includes('assault') || type.includes('sexual') || type.includes('rape')) {
+      const m = L.circleMarker([lat,lon], { radius:6, color: COLORS.Assault, fillColor: COLORS.Assault, fillOpacity:0.9 }).bindPopup(popup);
+      assaultLayer.addLayer(m);
+    } else {
+      const m = L.circleMarker([lat,lon], { radius:6, color: COLORS.Other, fillColor: COLORS.Other, fillOpacity:0.9 }).bindPopup(popup);
+      otherLayer.addLayer(m);
+    }
+  }
+
+  // news items (blue)
+  for (const n of cachedNews) {
+    const popup = `<b>${n.title}</b><br><a href="${n.url||'#'}" target="_blank">Read more</a>`;
+    const m = L.circleMarker([n.lat,n.lon], { radius:6, color: COLORS.News, fillColor: COLORS.News, fillOpacity:0.95 }).bindPopup(popup);
+    newsLayer.addLayer(m);
+  }
+}
+
+// update heatmap
+function updateHeat() {
+  if (heatLayer) map.removeLayer(heatLayer);
+  if (!toggleHeat.checked) return;
+  const pts = cachedHotspots.slice(); // array of [lat,lon]
+  if (!pts.length) return;
+  heatLayer = L.heatLayer(pts.map(p => [p[0], p[1], 0.6]), { radius:28, blur:22 }).addTo(map);
+}
+
+// update circles
+function updateCircles() {
+  circlesLayer.clearLayers();
+  if (!toggleCircles.checked) return;
+  for (const p of cachedHotspots) {
+    const c = L.circle([p[0],p[1]], { radius:1500, color: COLORS.Hot, fillOpacity:0.18 }).bindPopup(`<b>Hotspot</b><br/>(${p[0].toFixed(4)}, ${p[1].toFixed(4)})`);
+    circlesLayer.addLayer(c);
+  }
+}
+
+// show/hide crime types
+function updateCrimeVisibility() {
+  // Theft
+  if (toggleTheft.checked) {
+    if (!map.hasLayer(theftLayer)) map.addLayer(theftLayer);
+  } else { if (map.hasLayer(theftLayer)) map.removeLayer(theftLayer); }
+  // Assault
+  if (toggleAssault.checked) {
+    if (!map.hasLayer(assaultLayer)) map.addLayer(assaultLayer);
+  } else { if (map.hasLayer(assaultLayer)) map.removeLayer(assaultLayer); }
+  // Other
+  if (toggleOther.checked) {
+    if (!map.hasLayer(otherLayer)) map.addLayer(otherLayer);
+  } else { if (map.hasLayer(otherLayer)) map.removeLayer(otherLayer); }
+  // News
+  if (toggleNews.checked) {
+    if (!map.hasLayer(newsLayer)) map.addLayer(newsLayer);
+  } else { if (map.hasLayer(newsLayer)) map.removeLayer(newsLayer); }
+}
+
+// update sidebar summary counts
+function updateSummary() {
+  const totalReports = cachedReports.length;
+  const totalNews = cachedNews.length;
+  const totalHotspots = cachedHotspots.length;
+
+  // counts by type from reports
+  let theft=0, assault=0, other=0;
+  for (const r of cachedReports) {
+    const t = (r.predicted_type||'').toLowerCase();
+    if (t.includes('theft')) theft++;
+    else if (t.includes('assault') || t.includes('sexual') || t.includes('rape')) assault++;
+    else other++;
+  }
+
+  totalReportsVal.textContent = totalReports;
+  totalNewsVal.textContent = totalNews;
+  totalHotspotsVal.textContent = totalHotspots;
+  countTheftEl.textContent = theft;
+  countAssaultEl.textContent = assault;
+  countOtherEl.textContent = other;
+}
+
+// run full render pipeline
+async function renderAll() {
+  // fetch data
+  await Promise.all([ loadReports(), loadNews(), loadHotspots() ]);
+  // draw markers
+  drawCrimeMarkers();
+  // heat & circles
+  updateHeat();
+  updateCircles();
+  // visibility layers
+  updateCrimeVisibility();
+  // update summary
+  updateSummary();
+
+  // auto-zoom: compute bounds from hotspots + reports + news
+  const allPoints = [];
+  cachedHotspots.forEach(p=>allPoints.push([p[0],p[1]]));
+  cachedReports.forEach(r=>allPoints.push([r.lat, r.lon]));
+  cachedNews.forEach(n=>allPoints.push([n.lat,n.lon]));
+  if (allPoints.length) {
+    try {
+      const bounds = L.latLngBounds(allPoints);
+      map.fitBounds(bounds.pad(0.12));
+    } catch(e){
+      // fallback to India center
+      map.setView([22.5,79],5);
+    }
+  } else {
+    map.setView([22.5,79],5);
+  }
+}
+
+// events
+refreshBtn.addEventListener('click', renderAll);
+toggleHeat.addEventListener('change', () => { renderAll(); });
+toggleCircles.addEventListener('change', () => { renderAll(); });
+toggleNews.addEventListener('change', () => { updateCrimeVisibility(); });
+toggleTheft.addEventListener('change', () => { updateCrimeVisibility(); });
+toggleAssault.addEventListener('change', () => { updateCrimeVisibility(); });
+toggleOther.addEventListener('change', () => { updateCrimeVisibility(); });
+
+// initial load + periodic refresh
+renderAll();
+setInterval(renderAll, 120000); // 2 minutes
+</script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <title>Live SOS Map</title>
+
+  <link rel="stylesheet" 
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    body { font-family: Inter; margin:0; background:#f4f7fb; }
+    #map { height: 500px; border-radius:12px; margin:20px; }
+    .top { padding:20px; font-size:22px; font-weight:700; }
+  </style>
+</head>
+
+<body>
+
+<div class="top">🚨 Live SOS Alerts (Real-Time)</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+let map = L.map('map').setView([12.9716, 77.5946], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19
+}).addTo(map);
+
+let markers = {};
+
+function loadSOS() {
+  fetch('/api/sos/active')
+    .then(r => r.json())
+    .then(data => {
+      for (let s of data) {
+        if (!markers[s.id]) {
+          markers[s.id] = L.marker([s.lat, s.lon])
+            .addTo(map)
+            .bindPopup(`
+              <b>SOS ID:</b> ${s.id}<br>
+              <b>User:</b> ${s.user_id}<br>
+              <b>Time:</b> ${s.created_at}
+            `);
+        }
+      }
+    });
+}
+
+loadSOS();
+setInterval(loadSOS, 5000);
+</script>
+
+</body>
+</html>

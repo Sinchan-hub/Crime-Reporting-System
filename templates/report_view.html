@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>View Report</title>
+
+  <style>
+    :root{
+      --bg:#eef3f6;
+      --panel:#ffffff;
+      --muted:#6b7280;
+      --accent:#0b84ff;
+      --danger:#ff4d4d;
+      --shadow:0 8px 26px rgba(0,0,0,0.08);
+      --radius:14px;
+    }
+    body{
+      margin:0;
+      font-family:Inter, system-ui, Arial;
+      background:linear-gradient(180deg,#d8e3ef,#eef3f6);
+      padding:40px 0;
+      color:#0a1f2e;
+    }
+    .wrap{
+      max-width:850px;
+      margin:0 auto;
+      background:var(--panel);
+      border-radius:var(--radius);
+      padding:32px;
+      box-shadow:var(--shadow);
+    }
+    h1,h2,h3{margin:0 0 14px}
+    .muted{color:var(--muted)}
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      margin-top:20px;
+    }
+    .label{font-size:14px;color:var(--muted);margin-bottom:4px}
+    .value{font-size:17px;font-weight:600}
+    .img-box{
+      width:100%;
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      margin:20px 0;
+    }
+    .img-box img{
+      width:100%;
+      display:block;
+      object-fit:cover;
+    }
+    .btn{
+      padding:12px 17px;
+      font-size:15px;
+      font-weight:600;
+      border:0;
+      border-radius:10px;
+      cursor:pointer;
+      margin-right:8px;
+    }
+    .btn-outline{background:white;border:1px solid #cfd9e6}
+    .btn-primary{background:var(--accent);color:white}
+    .btn-danger{background:var(--danger);color:white}
+    .status-pill{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:30px;
+      font-size:13px;
+      font-weight:600;
+      margin-left:6px;
+    }
+    .st-reported{background:#dce9ff;color:#0a3d91}
+    .st-progress{background:#fff3cd;color:#b08500}
+    .st-closed{background:#d4f7d4;color:#1b7a32}
+    @media(max-width:700px){
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <!-- Top Section -->
+  <h1>{{ r.title }}</h1>
+  <p class="muted">
+    Report ID: {{ r.id }} • 
+    {{ r.incident_date or "No Date" }}
+  </p>
+
+  <!-- Status -->
+  <p>
+    <strong>Status:</strong>
+    {% if r.status == "Reported" %}
+      <span class="status-pill st-reported">Reported</span>
+    {% elif r.status == "In Progress" %}
+      <span class="status-pill st-progress">In Progress</span>
+    {% else %}
+      <span class="status-pill st-closed">Closed</span>
+    {% endif %}
+  </p>
+
+  <!-- Crime Type -->
+  <p>
+    <strong>Predicted Crime Type:</strong>  
+    <span style="font-weight:700">{{ r.predicted_type }}</span>
+  </p>
+
+  <!-- Image Preview -->
+  {% if r.image %}
+  <div class="img-box">
+    <img src="/static/uploads/{{ r.image }}" alt="Evidence Image">
+  </div>
+  {% endif %}
+
+  <!-- Description -->
+  <h3>Description</h3>
+  <p style="line-height:1.6; font-size:15px;">
+    {{ r.description }}
+  </p>
+
+  <!-- Grid -->
+  <div class="grid">
+    <div>
+      <div class="label">Location Name</div>
+      <div class="value">{{ r.location_name or "Not provided" }}</div>
+    </div>
+
+    <div>
+      <div class="label">Coordinates</div>
+      <div class="value">{{ r.lat }}, {{ r.lon }}</div>
+    </div>
+
+    <div>
+      <div class="label">Reported By</div>
+      <div class="value">{{ r.name }}</div>
+    </div>
+
+    <div>
+      <div class="label">Created On</div>
+      <div class="value">{{ r.created_at }}</div>
+    </div>
+  </div>
+
+  <div style="margin-top:30px">
+    <button class="btn btn-outline" onclick="location.href='/user/dashboard'">Back to Dashboard</button>
+  </div>
+
+</div>
+
+</body>
+</html>

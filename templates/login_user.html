@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Login — Crime Reporting</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --accent:#1e6fff;
+      --bg:#eef3f6;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --shadow:0 6px 24px rgba(12,24,40,0.1);
+      --radius:12px;
+    }
+
+    body{
+      margin:0;
+      font-family:Inter,system-ui;
+      background:linear-gradient(180deg,#6c97cf 0%, #eef3f6 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      color:#0b1220;
+    }
+
+    .login-box{
+      width:380px;
+      background:#fff;
+      padding:35px 32px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      animation:fadeIn .4s ease;
+    }
+
+    @keyframes fadeIn{
+      from{opacity:0; transform:translateY(10px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    h2{
+      margin:0 0 10px;
+      font-size:26px;
+      font-weight:700;
+      text-align:center;
+      color:#0b1220;
+    }
+
+    p.subtitle{
+      margin:0 0 22px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    label{
+      font-size:14px;
+      font-weight:600;
+      display:block;
+      margin-bottom:6px;
+      color:#122036;
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid #d2d8e0;
+      font-size:15px;
+      margin-bottom:18px;
+      outline:none;
+    }
+    input:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(30,111,255,0.15);
+    }
+
+    .btn{
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:none;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+      background:var(--accent);
+      color:white;
+      box-shadow:0 8px 28px rgba(14,94,255,0.20);
+    }
+
+    .btn:hover{
+      background:#0b5cff;
+    }
+
+    .bottom-text{
+      text-align:center;
+      margin-top:18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .bottom-text a{
+      color:var(--accent);
+      text-decoration:none;
+      font-weight:600;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div class="login-box">
+    
+    <!-- CHANGE THIS TEXT FOR USER / POLICE -->
+    <h2>User Login</h2>
+    <p class="subtitle">Welcome back! Please sign in to continue.</p>
+
+    <!-- FORM -->
+    <form method="POST">
+
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Enter your email" required>
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required>
+
+      <button class="btn" type="submit">Login</button>
+
+    </form>
+
+
+    <div class="bottom-text">
+      Don’t have an account?
+      <a href="/register/user">Register here</a>
+    </div>
+
+  </div>
+  
+</body>
+</html>

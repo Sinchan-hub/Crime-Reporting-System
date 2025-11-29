@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <title>SOS History — Police</title>
+  <style>
+    body { font-family: Inter; background:#f4f7fa; padding:20px; }
+    h2 { margin-bottom:20px; }
+    table { width:100%; background:white; border-collapse:collapse; }
+    th, td { padding:12px; border-bottom:1px solid #ddd; }
+    th { background:#18324b; color:white; }
+    .status-active { color:#ff3333; font-weight:bold; }
+    .status-resolved { color:#0a8a2a; font-weight:bold; }
+  </style>
+</head>
+<body>
+
+<h2>All SOS Alerts — History</h2>
+
+<table id="sosTable">
+  <tr>
+    <th>ID</th>
+    <th>User</th>
+    <th>Location</th>
+    <th>Triggered At</th>
+    <th>Status</th>
+  </tr>
+</table>
+
+<script>
+fetch('/api/sos/history')
+  .then(r => r.json())
+  .then(data => {
+    let table = document.getElementById("sosTable");
+
+    data.forEach(s => {
+      let row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${s.id}</td>
+        <td>${s.user_id}</td>
+        <td>${s.lat}, ${s.lon}</td>
+        <td>${s.created_at}</td>
+        <td class="${s.status === 'active' ? 'status-active' : 'status-resolved'}">${s.status}</td>
+      `;
+
+      table.appendChild(row);
+    });
+  });
+</script>
+
+</body>
+</html>
